@@ -6,45 +6,70 @@ namespace InfiniteExplore
 {
     public class Game1 : Game
     {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        public GraphicsDeviceManager Graphics { get; private set; }
+        public SpriteBatch SpriteBatch { get; private set; }
+
+        public KeyboardState KeyboardState { get; private set; }
+
+        public Player Player { get; private set; }
+        public Camera Camera { get; private set; }
+        public Map Map { get; private set; }
 
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
+            Map = new Map();
+            Player = new Player(0, 0, Drawing.Grid, Drawing.Grid * 2);
+            Camera = new Camera();
         }
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            // Initialize graphics
+            Drawing.Initialize(this);
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            // Load content
+            Drawing.LoadContent(this);
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            // Get time delta
+            float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            // TODO: Add your update logic here
+            // Get and process keyboard state
+            KeyboardState = Keyboard.GetState();
+            if (KeyboardState.IsKeyDown(Keys.Escape)) Exit();
+
+            Player.Update(delta, this); // Update player
+            Camera.Update(this); // Update camera
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
-            // TODO: Add your drawing code here
+            // World sprite batch
+            SpriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: Camera.Transform);
+            Map.Draw(this); // Draw map
+            Player.Draw(this); // Draw player
+            SpriteBatch.End();
+
+            // UI sprite batch
+            SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            SpriteBatch.End();
 
             base.Draw(gameTime);
         }
