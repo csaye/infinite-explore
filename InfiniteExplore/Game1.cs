@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace InfiniteExplore
 {
@@ -14,6 +15,9 @@ namespace InfiniteExplore
         public Player Player { get; private set; }
         public Camera Camera { get; private set; }
         public Map Map { get; private set; }
+
+        private int ufps;
+        private int dfps;
 
         public Game1()
         {
@@ -44,8 +48,9 @@ namespace InfiniteExplore
 
         protected override void Update(GameTime gameTime)
         {
-            // Get time delta
+            // Get time delta and update FPS
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            ufps = (int)Math.Round(1 / delta);
 
             // Get and process keyboard state
             KeyboardState = Keyboard.GetState();
@@ -59,6 +64,10 @@ namespace InfiniteExplore
 
         protected override void Draw(GameTime gameTime)
         {
+            // Get time delta and draw FPS
+            float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            dfps = (int)Math.Round(1 / delta);
+
             GraphicsDevice.Clear(Color.Black);
 
             // World sprite batch
@@ -69,6 +78,9 @@ namespace InfiniteExplore
 
             // UI sprite batch
             SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            Drawing.DrawText($"ufps: {ufps}", new Vector2(8, 8), Color.White, this);
+            Drawing.DrawText($"dfps: {dfps}", new Vector2(8, 24), Color.White, this);
+            Player.DrawUI(this);
             SpriteBatch.End();
 
             base.Draw(gameTime);

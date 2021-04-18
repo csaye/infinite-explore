@@ -12,6 +12,8 @@ namespace InfiniteExplore
 
         public static Texture2D PlayerTexture { get; private set; }
         public static Texture2D TilesetTexture { get; private set; }
+        public static Texture2D GrassTexture { get; private set; }
+        public static Texture2D TreeTexture { get; private set; }
 
         private static SpriteFont arialFont;
 
@@ -27,6 +29,8 @@ namespace InfiniteExplore
         {
             PlayerTexture = game.Content.Load<Texture2D>("Player");
             TilesetTexture = game.Content.Load<Texture2D>("Tileset");
+            GrassTexture = game.Content.Load<Texture2D>("Grass");
+            TreeTexture = game.Content.Load<Texture2D>("Tree");
 
             arialFont = game.Content.Load<SpriteFont>("Arial");
         }
@@ -37,7 +41,7 @@ namespace InfiniteExplore
             // Calculate source rect from source size and tileset index
             int spriteWidth = (int)spriteSize.X;
             int spriteHeight = (int)spriteSize.Y;
-            int spritesPerRow = texture.Width / destRect.Width;
+            int spritesPerRow = texture.Width / spriteWidth;
             int tilesetX = tilesetIndex % spritesPerRow * spriteWidth;
             int tilesetY = tilesetIndex / spritesPerRow * spriteHeight;
             Rectangle sourceRect = new Rectangle(tilesetX, tilesetY, spriteWidth, spriteHeight);

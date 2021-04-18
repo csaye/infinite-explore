@@ -21,8 +21,8 @@ namespace InfiniteExplore
             Vector2 playerSize = game.Player.Size;
 
             // Get camera position
-            float cameraX = playerPosition.X + playerSize.X / 2;
-            float cameraY = playerPosition.Y + playerSize.Y / 2;
+            int cameraX = (int)(playerPosition.X + (playerSize.X / 2));
+            int cameraY = (int)(playerPosition.Y + (playerSize.Y / 2));
             MinPosition = new Vector2(cameraX - MidWidth, cameraY - MidWidth);
 
             // Invert camera view
